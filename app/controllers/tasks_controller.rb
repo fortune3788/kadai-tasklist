@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   before_action :correct_user, only: [:show, :edit, :update, :destroy]
   
   def index
-    @task = current_user.tasks.build
+    #@task = current_user.tasks.build
     @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
   end
   
@@ -19,11 +19,11 @@ class TasksController < ApplicationController
     @task = current_user.tasks.build(task_params)
     if @task.save
       flash[:success] = 'タスクが正常に投稿されました'
-      redirect_to root_url
+      redirect_to @task
     else
       @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
       flash.now[:danger] = 'タスクが投稿されませんでした'
-      render 'tasks/index'
+      render :new
     end
   end
   
@@ -48,9 +48,9 @@ class TasksController < ApplicationController
   
   private
   
-  def set_task
-    @task = Task.find(params[:id])
-  end
+  #def set_task
+    #@task = Task.find(params[:id])
+  #end
   
   def task_params
     params.require(:task).permit(:content, :status)
